@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Confirmação do Discord</title>
+</head>
+<body>
+  <h1 id="status">Verificando sua conta...</h1>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+
+    if (!code) {
+      document.getElementById("status").innerText = "❌ Nenhum código recebido.";
+    } else {
+      fetch(`/api/callback?code=${encodeURIComponent(code)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            window.location.href = "/verificado.html";
+          } else {
+            document.getElementById("status").innerText = "❌ Erro na verificação.";
+          }
+        })
+        .catch(() => {
+          document.getElementById("status").innerText = "❌ Erro na conexão com o servidor.";
+        });
+    }
+  </script>
+</body>
+</html>
